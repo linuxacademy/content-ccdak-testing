@@ -2,7 +2,6 @@ package com.linuxacademy.ccdak.testing;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.kafka.clients.producer.MockProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -63,6 +62,7 @@ public class MyProducerTest {
         Assert.assertEquals(Integer.valueOf(1), record.key());
         Assert.assertEquals("Test Data", record.value());
         Assert.assertEquals("test_topic", record.topic());
+        Assert.assertEquals("key=1, value=Test Data\n", systemOutContent.toString());
     }
     
 }
