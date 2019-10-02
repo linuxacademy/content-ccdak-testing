@@ -3,6 +3,7 @@ package com.linuxacademy.ccdak.testing;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,11 +53,15 @@ public class MyConsumerTest {
         // Verify that the testHandleRecords writes the correct data to System.out
         String topic = "test_topic";
         ConsumerRecord<Integer, String> record = new ConsumerRecord<>(topic, 0, 1, 2, "Test value");
-        Map<TopicPartition, List<ConsumerRecord<Integer, String>>> records = new LinkedHashMap<>();
-        records.put(new TopicPartition(topic, 0), Arrays.asList(record));
-        ConsumerRecords<Integer, String> consumerRecords = new ConsumerRecords<>(records);
         
-        myConsumer.handleRecords(consumerRecords);
+        mockConsumer.assign(Arrays.asList(new TopicPartition(topic, 0)));
+        HashMap<TopicPartition, Long> beginningOffsets = new HashMap<>();
+        beginningOffsets.put(new TopicPartition("test_topic", 0), 0L);
+        mockConsumer.updateBeginningOffsets(beginningOffsets);
+        
+        mockConsumer.addRecord(record);
+        
+        myConsumer.handleRecords();
         Assert.assertEquals("key=2, value=Test value, topic=test_topic, partition=0, offset=1\n", systemOutContent.toString());
     }
     

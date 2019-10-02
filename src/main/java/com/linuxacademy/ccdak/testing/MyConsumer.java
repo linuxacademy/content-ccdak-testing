@@ -31,13 +31,13 @@ public class MyConsumer {
     public void run() {
         
         while (true) {
-            ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(100));
-            handleRecords(records);
+            handleRecords();
         }
         
     }
     
-    public void handleRecords(ConsumerRecords<Integer, String> records) {
+    public void handleRecords() {
+        ConsumerRecords<Integer, String> records = consumer.poll(Duration.ofMillis(100));
         for (ConsumerRecord<Integer, String> record : records) {
             System.out.println("key=" + record.key() + ", value=" + record.value() + ", topic=" + record.topic() + ", partition=" + record.partition() + ", offset=" + record.offset());
         }
